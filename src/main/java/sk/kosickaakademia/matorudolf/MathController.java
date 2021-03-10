@@ -6,9 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MathController {
@@ -37,6 +35,17 @@ public class MathController {
         return null;
 
     }
+    @GetMapping("/mul")
+    public ResponseEntity<String> multiply(@RequestParam(value = "a") int value1, @RequestParam(value = "b") int value2) {
+
+        int result = (value1*value2);
+        JSONObject obj = new JSONObject();
+        obj.put ("result",result);
+
+        return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(obj.toJSONString());
 
     }
+    }
+
+
 
