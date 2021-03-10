@@ -7,6 +7,10 @@ import java.util.Date;
 @RestController
 
 public class Controller {
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public String getRoot () {
+        return "<h1>Ahoj.</h1>";
+    }
 
     @RequestMapping(path = "/hello/sk")
     public String getHelloSk() {
