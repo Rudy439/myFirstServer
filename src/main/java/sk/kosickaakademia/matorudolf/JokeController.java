@@ -1,5 +1,8 @@
 package sk.kosickaakademia.matorudolf;
 
+
+
+
 import jdk.internal.access.JavaSecurityAccess;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 public class JokeController {
@@ -54,5 +58,25 @@ public class JokeController {
         }
         return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(obj.toJSONString());
     }
+    @GetMapping ("/joke")
+    public ResponseEntity<String> getRandomJoke(@PathVariable Integer id){
+
+        JSONObject obj = new JSONObject();
+        int status;
+        if(list.size()==0) {
+            obj.put("error", "Invalid id, no joke");
+            status = 404;
+        }else {
+            Random rand = new Random();
+            int index = rand.nextInt(list.size());
+            obj.put("id",index);
+            obj.put("joke", list.get(index));
+            status = 200;
+        }
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(obj.toJSONString());
+
+
+    }
+
     }
 
