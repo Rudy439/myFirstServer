@@ -3,14 +3,14 @@ package sk.kosickaakademia.matorudolf;
 
 
 
-import jdk.internal.access.JavaSecurityAccess;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Random;
 @RestController
 public class JokeController {
 
-    String joke1 = "How does Moses make tea? He brews.";
+    String joke1 = "How does Moses make tea? Hebrews it.";
     String joke2 = "What kind of exercise do lazy people do? Diddly-squats.";
     String joke3 = "What do you call a magic dog? A labracadabrador.";
     List<String> list  = new ArrayList<>();
@@ -39,7 +39,7 @@ public class JokeController {
         JSONArray jArray = new JSONArray();
        for (String s: list)
            jArray.add(s);
-        JavaSecurityAccess.ProtectionDomainCache object;
+
         obj.put("jokes",jArray);
         return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(obj.toJSONString());
     }
@@ -77,6 +77,22 @@ public class JokeController {
 
 
     }
+    @PostMapping ("/joke/new")
+    public ResponseEntity<String> newJoke (@RequestBody String data) {
+        try{
+            JSONObject obj = (JSONObject) new JSONParser().parse(data);
+            System.out.println(obj.toString());
+             String newJoke = String.valueOf(obj.get("joke"));
+            if(newJoke==null)
+                return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
+            System.out.println(newJoke);
+            list.add(newJoke);
+            return ResponseEntity.status(201).contentType(MediaType.APPLICATION_JSON).body("{}");
 
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body("{}");
     }
+}
 
